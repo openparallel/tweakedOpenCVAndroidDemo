@@ -3,15 +3,20 @@ package com.example.tweakedopencvandroiddemo;
 import java.io.InputStream;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.NoCopySpan.Concrete;
 import android.text.Selection;
 import android.text.Spannable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +36,6 @@ public class MainActivity extends Activity {
 		
 		private ImageView imageView;
 		private int width, height;
-		private String runTimeString; 
 		public int[] getImageFromInputStream(InputStream is){
 			Bitmap photo = BitmapFactory.decodeStream(is);
 			
@@ -55,578 +59,598 @@ public class MainActivity extends Activity {
 			return height;
 		}
 		
-		void zeroPointThreeMegaPixels(int typeOfOp){
-			
-			int data[];
-			int w,h;
-			InputStream is;
-			
-			double avgUnoptRuntime = 0;
-			for(int i = 0; i < 20; i++){
-				is = getResources().openRawResource(R.raw.la);
-			
-				data = getImageFromInputStream(is);
-				w = getImageWidth();
-				h = getImageHeight();
-			
-				setSourceImage(data, w, h);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-			
-				is = getResources().openRawResource(R.raw.le);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.lg);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.lm);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.lq);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-			}
-			
-			Log.e("CaptainsLog", "The average unoptimised runtime is " + (avgUnoptRuntime/100));
-			
-			double avgOptRuntime = 0;
-			for(int i = 0; i < 20; i++){
-				is = getResources().openRawResource(R.raw.la);
-			
-				data = getImageFromInputStream(is);
-				w = getImageWidth();
-				h = getImageHeight();
-			
-				setSourceImage(data, w, h);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-			
-				is = getResources().openRawResource(R.raw.le);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.lg);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.lm);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.lq);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-			}
-			
-			Log.e("CaptainsLog", "The average optimised runtime is " + (avgOptRuntime/100));
-			Log.e("CaptainsLog", "The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
-			
-		}
 		
-		void OneMegaPixels(int typeOfOp){
-			
-			int data[];
-			int w,h;
-			InputStream is;
-			
-			double avgUnoptRuntime = 0;
-			for(int i = 0; i < 20; i++){
-				is = getResources().openRawResource(R.raw.ma);
-			
-				data = getImageFromInputStream(is);
-				w = getImageWidth();
-				h = getImageHeight();
-			
-				setSourceImage(data, w, h);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-			
-				is = getResources().openRawResource(R.raw.me);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.mg);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.mm);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.mq);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-			}
-			
-			Log.e("CaptainsLog", "The average unoptimised runtime is " + (avgUnoptRuntime/100));
-			
-			double avgOptRuntime = 0;
-			for(int i = 0; i < 20; i++){
-				is = getResources().openRawResource(R.raw.ma);
-			
-				data = getImageFromInputStream(is);
-				w = getImageWidth();
-				h = getImageHeight();
-			
-				setSourceImage(data, w, h);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-			
-				is = getResources().openRawResource(R.raw.me);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.mg);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.mm);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.mq);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-			}
-			
-			Log.e("CaptainsLog", "The average optimised runtime is " + (avgOptRuntime/100));
-			Log.e("CaptainsLog", "The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
-			
-		}
 		
-
-		void FiveMegaPixels(int typeOfOp){
-		
-		int data[];
-		int w,h;
-		InputStream is;
-		
-		double avgUnoptRuntime = 0;
-		for(int i = 0; i < 20; i++){
-			is = getResources().openRawResource(R.raw.ha);
-		
-			data = getImageFromInputStream(is);
-			w = getImageWidth();
-			h = getImageHeight();
-		
-			setSourceImage(data, w, h);
-			avgUnoptRuntime += doBenchmark(typeOfOp,false);
-		
-			is = getResources().openRawResource(R.raw.he);
-			data = getImageFromInputStream(is);
-			avgUnoptRuntime += doBenchmark(typeOfOp,false);
+		private Handler handler = new Handler() {
+			@Override
+				public void handleMessage(Message newContent) {
+					TextView textView = (TextView)findViewById(R.id.textView1);
+					Bundle resBundle = (Bundle)newContent.obj;
+					
+					
+					textView.append(resBundle.getString("status").toString()+"\n");
+					
+					textView.setSelected(true); 
+					Spannable text = (Spannable) textView.getText(); 
+					Selection.setSelection(text, text.length()); 
+				}
+		};
 			
-			is = getResources().openRawResource(R.raw.hg);
-			data = getImageFromInputStream(is);
-			avgUnoptRuntime += doBenchmark(typeOfOp,false);
-			
-			is = getResources().openRawResource(R.raw.hm);
-			data = getImageFromInputStream(is);
-			avgUnoptRuntime += doBenchmark(typeOfOp,false);
-			
-			is = getResources().openRawResource(R.raw.hq);
-			data = getImageFromInputStream(is);
-			avgUnoptRuntime += doBenchmark(typeOfOp,false);
-			
-		}
-		
-		Log.e("CaptainsLog", "The average unoptimised runtime is " + (avgUnoptRuntime/100));
-		
-		double avgOptRuntime = 0;
-		for(int i = 0; i < 20; i++){
-			is = getResources().openRawResource(R.raw.ha);
-		
-			data = getImageFromInputStream(is);
-			w = getImageWidth();
-			h = getImageHeight();
-		
-			setSourceImage(data, w, h);
-			avgOptRuntime += doBenchmark(typeOfOp,true);
-		
-			is = getResources().openRawResource(R.raw.he);
-			data = getImageFromInputStream(is);
-			avgOptRuntime += doBenchmark(typeOfOp,true);
-			
-			is = getResources().openRawResource(R.raw.hg);
-			data = getImageFromInputStream(is);
-			avgOptRuntime += doBenchmark(typeOfOp,true);
-			
-			is = getResources().openRawResource(R.raw.hm);
-			data = getImageFromInputStream(is);
-			avgOptRuntime += doBenchmark(typeOfOp,true);
-			
-			is = getResources().openRawResource(R.raw.hq);
-			data = getImageFromInputStream(is);
-			avgOptRuntime += doBenchmark(typeOfOp,true);
-			
-		}
-		
-		Log.e("CaptainsLog", "The average optimised runtime is " + (avgOptRuntime/100));
-		Log.e("CaptainsLog", "The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
-		
-	}
-
-
-		void EightMegaPixels(int typeOfOp){
-			int data[];
-			int w,h;
-			InputStream is;
-		
-			double avgUnoptRuntime = 0;
-			for(int i = 0; i < 20; i++){
-				is = getResources().openRawResource(R.raw.vha);
-				data = getImageFromInputStream(is);
-				w = getImageWidth();
-				h = getImageHeight();
-				
-				setSourceImage(data, w, h);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.vhe);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.vhg);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.vhm);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-				
-				is = getResources().openRawResource(R.raw.vhq);
-				data = getImageFromInputStream(is);
-				avgUnoptRuntime += doBenchmark(typeOfOp,false);
-			}
-		
-			Log.e("CaptainsLog", "The average unoptimised runtime is " + (avgUnoptRuntime/100));
-			
-			double avgOptRuntime = 0;
-			for(int i = 0; i < 20; i++){
-				is = getResources().openRawResource(R.raw.vha);
-				
-				data = getImageFromInputStream(is);
-				w = getImageWidth();
-				h = getImageHeight();
-
-				setSourceImage(data, w, h);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.vhe);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.vhg);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.vhm);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-				is = getResources().openRawResource(R.raw.vhq);
-				data = getImageFromInputStream(is);
-				avgOptRuntime += doBenchmark(typeOfOp,true);
-				
-			}
-			Log.e("CaptainsLog", "The average optimised runtime is " + (avgOptRuntime/100));
-			Log.e("CaptainsLog", "The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
-			
-		}
-
-		protected void showToUser(String newContent){
-			
-			TextView textView = (TextView)findViewById(R.id.textView1);
-			textView.append(newContent);
-			textView.setSelected(true); 
-			Spannable text = (Spannable) textView.getText(); 
-			Selection.setSelection(text, text.length()); 
-			
-		}
 		
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_main);
-		
+						
 			final Button benchmarkButton = (Button)findViewById(R.id.button1);
 			final ImageView imageView =  (ImageView)findViewById(R.id.imageView1);
 			TextView textView = (TextView)findViewById(R.id.textView1);
 			
-			runTimeString = "";
-			textView.setText(runTimeString);
+			textView.setText("");
 			
 			benchmarkButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){
 
 				new Thread(new Runnable() {
+					public void passMessage(String message){
+						Message myMessage=new Message();
+						Bundle resBundle = new Bundle();
+						resBundle.putString("status", message);
+						myMessage.obj=resBundle;
+						handler.sendMessage(myMessage);
+					}
+					
+					public void report(String message){
+						Log.e("CaptainsLog", message);
+						passMessage(message);
+					}
+					
+					void zeroPointThreeMegaPixels(int typeOfOp){
+						
+						int data[];
+						int w,h;
+						InputStream is;
+						
+						double avgUnoptRuntime = 0;
+						for(int i = 0; i < 20; i++){
+							is = getResources().openRawResource(R.raw.la);
+						
+							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+						
+							setSourceImage(data, w, h);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						
+							is = getResources().openRawResource(R.raw.le);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.lg);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.lm);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.lq);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+						}
+						
+						report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
+						
+						double avgOptRuntime = 0;
+						for(int i = 0; i < 20; i++){
+							is = getResources().openRawResource(R.raw.la);
+						
+							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+						
+							setSourceImage(data, w, h);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+						
+							is = getResources().openRawResource(R.raw.le);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.lg);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.lm);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.lq);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+						}
+						
+						report("The average optimised runtime is " + (avgOptRuntime/100));
+						report("The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
+						
+					}
+					
+					void OneMegaPixels(int typeOfOp){
+						
+						int data[];
+						int w,h;
+						InputStream is;
+						
+						double avgUnoptRuntime = 0;
+						for(int i = 0; i < 20; i++){
+							is = getResources().openRawResource(R.raw.ma);
+						
+							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+						
+							setSourceImage(data, w, h);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						
+							is = getResources().openRawResource(R.raw.me);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.mg);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.mm);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.mq);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+						}
+						
+						report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
+						
+						double avgOptRuntime = 0;
+						for(int i = 0; i < 20; i++){
+							is = getResources().openRawResource(R.raw.ma);
+						
+							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+						
+							setSourceImage(data, w, h);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+						
+							is = getResources().openRawResource(R.raw.me);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.mg);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.mm);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.mq);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+						}
+						
+						report("The average optimised runtime is " + (avgOptRuntime/100));
+						report("The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
+						
+					}
+					
+
+					void FiveMegaPixels(int typeOfOp){
+					
+					int data[];
+					int w,h;
+					InputStream is;
+					
+					double avgUnoptRuntime = 0;
+					for(int i = 0; i < 20; i++){
+						is = getResources().openRawResource(R.raw.ha);
+					
+						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+					
+						setSourceImage(data, w, h);
+						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+					
+						is = getResources().openRawResource(R.raw.he);
+						data = getImageFromInputStream(is);
+						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						
+						is = getResources().openRawResource(R.raw.hg);
+						data = getImageFromInputStream(is);
+						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						
+						is = getResources().openRawResource(R.raw.hm);
+						data = getImageFromInputStream(is);
+						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						
+						is = getResources().openRawResource(R.raw.hq);
+						data = getImageFromInputStream(is);
+						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						
+					}
+					
+					report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
+					
+					double avgOptRuntime = 0;
+					for(int i = 0; i < 20; i++){
+						is = getResources().openRawResource(R.raw.ha);
+					
+						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+					
+						setSourceImage(data, w, h);
+						avgOptRuntime += doBenchmark(typeOfOp,true);
+					
+						is = getResources().openRawResource(R.raw.he);
+						data = getImageFromInputStream(is);
+						avgOptRuntime += doBenchmark(typeOfOp,true);
+						
+						is = getResources().openRawResource(R.raw.hg);
+						data = getImageFromInputStream(is);
+						avgOptRuntime += doBenchmark(typeOfOp,true);
+						
+						is = getResources().openRawResource(R.raw.hm);
+						data = getImageFromInputStream(is);
+						avgOptRuntime += doBenchmark(typeOfOp,true);
+						
+						is = getResources().openRawResource(R.raw.hq);
+						data = getImageFromInputStream(is);
+						avgOptRuntime += doBenchmark(typeOfOp,true);
+						
+					}
+					
+					report("The average optimised runtime is " + (avgOptRuntime/100));
+					report("The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
+					
+				}
+
+
+					void EightMegaPixels(int typeOfOp){
+						int data[];
+						int w,h;
+						InputStream is;
+					
+						double avgUnoptRuntime = 0;
+						for(int i = 0; i < 20; i++){
+							is = getResources().openRawResource(R.raw.vha);
+							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							
+							setSourceImage(data, w, h);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.vhe);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.vhg);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.vhm);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							
+							is = getResources().openRawResource(R.raw.vhq);
+							data = getImageFromInputStream(is);
+							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						}
+					
+						report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
+						
+						double avgOptRuntime = 0;
+						for(int i = 0; i < 20; i++){
+							is = getResources().openRawResource(R.raw.vha);
+							
+							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+
+							setSourceImage(data, w, h);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.vhe);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.vhg);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.vhm);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+							is = getResources().openRawResource(R.raw.vhq);
+							data = getImageFromInputStream(is);
+							avgOptRuntime += doBenchmark(typeOfOp,true);
+							
+						}
+						report("The average optimised runtime is " + (avgOptRuntime/100));
+						report("The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
+						
+					}
+					
 			        public void run() {
 
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "640x480 (0.3 mpx resolution)");
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "convert 32 -> 16");
-						Log.e("CaptainsLog", "----------------------------");
+						report("****************************");
+						report("640x480 (0.3 mpx resolution)");
+						report("****************************");
+						report("----------------------------");
+						report("convert 32 -> 16");
+						report("----------------------------");
 						
-						showToUser("****************************\n");
-						showToUser("640x480 (0.3 mpx resolution)");
+						
+						//showToUser("640x480 (0.3 mpx resolution)");
 						
 						zeroPointThreeMegaPixels(0);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(1);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (8-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(2);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (8-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(3);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (8-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(4);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (8-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(5);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(6);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (16-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(7);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (16-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(8);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (16-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(9);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (16-bit)");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(10);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Gaussian Blur");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Gaussian Blur");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(11);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Sobel Filter");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Sobel Filter");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(12);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Edge Detection");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Edge Detection");
+						report("----------------------------");
 						zeroPointThreeMegaPixels(13);
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
+						report("");
+						report("");
+						report("");
 						
 						
 						
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "1280x960 (1 mpx resolution)");
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "convert 32 -> 16");
-						Log.e("CaptainsLog", "----------------------------");
+						report("****************************");
+						report("1280x960 (1 mpx resolution)");
+						report("****************************");
+						report("----------------------------");
+						report("convert 32 -> 16");
+						report("----------------------------");
 						OneMegaPixels(0);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						OneMegaPixels(1);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (8-bit)");
+						report("----------------------------");
 						OneMegaPixels(2);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (8-bit)");
+						report("----------------------------");
 						OneMegaPixels(3);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (8-bit)");
+						report("----------------------------");
 						OneMegaPixels(4);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (8-bit)");
+						report("----------------------------");
 						OneMegaPixels(5);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						OneMegaPixels(6);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (16-bit)");
+						report("----------------------------");
 						OneMegaPixels(7);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (16-bit)");
+						report("----------------------------");
 						OneMegaPixels(8);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (16-bit)");
+						report("----------------------------");
 						OneMegaPixels(9);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (16-bit)");
+						report("----------------------------");
 						OneMegaPixels(10);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Gaussian Blur");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Gaussian Blur");
+						report("----------------------------");
 						OneMegaPixels(11);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Sobel Filter");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Sobel Filter");
+						report("----------------------------");
 						OneMegaPixels(12);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Edge Detection");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Edge Detection");
+						report("----------------------------");
 						OneMegaPixels(13);
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
+						report("");
+						report("");
+						report("");
 						
 						
 						
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "2560x1920 (5 mpx resolution)");
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "convert 32 -> 16");
-						Log.e("CaptainsLog", "----------------------------");
+						report("****************************");
+						report("2560x1920 (5 mpx resolution)");
+						report("****************************");
+						report("----------------------------");
+						report("convert 32 -> 16");
+						report("----------------------------");
 						FiveMegaPixels(0);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						FiveMegaPixels(1);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (8-bit)");
+						report("----------------------------");
 						FiveMegaPixels(2);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (8-bit)");
+						report("----------------------------");
 						FiveMegaPixels(3);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (8-bit)");
+						report("----------------------------");
 						FiveMegaPixels(4);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (8-bit)");
+						report("----------------------------");
 						FiveMegaPixels(5);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						FiveMegaPixels(6);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (16-bit)");
+						report("----------------------------");
 						FiveMegaPixels(7);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (16-bit)");
+						report("----------------------------");
 						FiveMegaPixels(8);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (16-bit)");
+						report("----------------------------");
 						FiveMegaPixels(9);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (16-bit)");
+						report("----------------------------");
 						FiveMegaPixels(10);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Gaussian Blur");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Gaussian Blur");
+						report("----------------------------");
 						FiveMegaPixels(11);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Sobel Filter");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Sobel Filter");
+						report("----------------------------");
 						FiveMegaPixels(12);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Edge Detection");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Edge Detection");
+						report("----------------------------");
 						FiveMegaPixels(13);
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
+						report("");
+						report("");
+						report("");
 						
 						
 						
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "3264x2448 (8 mpx resolution)");
-						Log.e("CaptainsLog", "****************************");
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "convert 32 -> 16");
-						Log.e("CaptainsLog", "----------------------------");
+						report("****************************");
+						report("3264x2448 (8 mpx resolution)");
+						report("****************************");
+						report("----------------------------");
+						report("convert 32 -> 16");
+						report("----------------------------");
 						EightMegaPixels(0);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						EightMegaPixels(1);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (8-bit)");
+						report("----------------------------");
 						EightMegaPixels(2);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (8-bit)");
+						report("----------------------------");
 						EightMegaPixels(3);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (8-bit)");
+						report("----------------------------");
 						EightMegaPixels(4);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (8-bit)");
+						report("----------------------------");
 						EightMegaPixels(5);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh (8-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh (8-bit)");
+						report("----------------------------");
 						EightMegaPixels(6);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "binary thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("binary thresh inv (16-bit)");
+						report("----------------------------");
 						EightMegaPixels(7);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "trunc thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("trunc thresh (16-bit)");
+						report("----------------------------");
 						EightMegaPixels(8);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh (16-bit)");
+						report("----------------------------");
 						EightMegaPixels(9);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "to-zero thresh inv (16-bit)");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("to-zero thresh inv (16-bit)");
+						report("----------------------------");
 						EightMegaPixels(10);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Gaussian Blur");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Gaussian Blur");
+						report("----------------------------");
 						EightMegaPixels(11);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Sobel Filter");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Sobel Filter");
+						report("----------------------------");
 						EightMegaPixels(12);
-						Log.e("CaptainsLog", "----------------------------");
-						Log.e("CaptainsLog", "Edge Detection");
-						Log.e("CaptainsLog", "----------------------------");
+						report("----------------------------");
+						report("Edge Detection");
+						report("----------------------------");
 						EightMegaPixels(13);
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
-						Log.e("CaptainsLog", "");
+						report("");
+						report("");
+						report("");
 						
 						byte[] resultData = getSourceImage();
 						Bitmap resultPhoto = BitmapFactory.decodeByteArray(resultData, 0, resultData.length);
