@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -70,9 +71,14 @@ public class MainActivity extends Activity {
 					
 					textView.append(resBundle.getString("status").toString()+"\n");
 					
+					
+					
 					textView.setSelected(true); 
 					Spannable text = (Spannable) textView.getText(); 
 					Selection.setSelection(text, text.length()); 
+					
+					ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView1);
+					scrollView.fullScroll(View.FOCUS_DOWN);
 				}
 		};
 			
