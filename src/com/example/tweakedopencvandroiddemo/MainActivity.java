@@ -61,7 +61,6 @@ public class MainActivity extends Activity {
 		}
 		
 		
-		
 		private Handler handler = new Handler() {
 			@Override
 				public void handleMessage(Message newContent) {
@@ -81,6 +80,21 @@ public class MainActivity extends Activity {
 					scrollView.fullScroll(View.FOCUS_DOWN);
 				}
 		};
+		
+		
+		private Handler imageDisplayHandler = new Handler() {
+			@Override
+				public void handleMessage(Message newContent) {
+					Log.e("Captains Log", "Oh boy... a new piccy!");
+					ImageView imageView = (ImageView)findViewById(R.id.imageView1);
+					
+					byte[] resultData = getSourceImage();
+					Bitmap resultPhoto = BitmapFactory.decodeByteArray(resultData, 0, resultData.length);
+					
+					imageView.setImageBitmap(resultPhoto);
+				
+				}
+		};
 			
 		
 		@Override
@@ -89,7 +103,7 @@ public class MainActivity extends Activity {
 			setContentView(R.layout.activity_main);
 						
 			final Button benchmarkButton = (Button)findViewById(R.id.button1);
-			final ImageView imageView =  (ImageView)findViewById(R.id.imageView1);
+			ImageView imageView =  (ImageView)findViewById(R.id.imageView1);
 			TextView textView = (TextView)findViewById(R.id.textView1);
 			
 			textView.setText("");
@@ -99,6 +113,14 @@ public class MainActivity extends Activity {
 			public void onClick(View v){
 
 				new Thread(new Runnable() {
+					public void passANewImage(){
+						Message myMessage=new Message();
+						Bundle resBundle = new Bundle();
+						resBundle.putString("status", "");
+						myMessage.obj=resBundle;
+						imageDisplayHandler.sendMessage(myMessage);
+					}
+					
 					public void passMessage(String message){
 						Message myMessage=new Message();
 						Bundle resBundle = new Bundle();
@@ -121,30 +143,44 @@ public class MainActivity extends Activity {
 						double avgUnoptRuntime = 0;
 						for(int i = 0; i < 20; i++){
 							is = getResources().openRawResource(R.raw.la);
-						
 							data = getImageFromInputStream(is);
 							w = getImageWidth();
 							h = getImageHeight();
-						
 							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
-						
+							passANewImage();
+							
 							is = getResources().openRawResource(R.raw.le);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.lg);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.lm);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.lq);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
-							
+							passANewImage();
 						}
 						
 						report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
@@ -152,30 +188,44 @@ public class MainActivity extends Activity {
 						double avgOptRuntime = 0;
 						for(int i = 0; i < 20; i++){
 							is = getResources().openRawResource(R.raw.la);
-						
 							data = getImageFromInputStream(is);
 							w = getImageWidth();
 							h = getImageHeight();
-						
 							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
-						
+							passANewImage();
+							
 							is = getResources().openRawResource(R.raw.le);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.lg);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.lm);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.lq);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
-							
+							passANewImage();
 						}
 						
 						report("The average optimised runtime is " + (avgOptRuntime/100));
@@ -192,30 +242,44 @@ public class MainActivity extends Activity {
 						double avgUnoptRuntime = 0;
 						for(int i = 0; i < 20; i++){
 							is = getResources().openRawResource(R.raw.ma);
-						
 							data = getImageFromInputStream(is);
 							w = getImageWidth();
 							h = getImageHeight();
-						
 							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
-						
+							passANewImage();
+							
 							is = getResources().openRawResource(R.raw.me);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.mg);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.mm);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.mq);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
-							
+							passANewImage();
 						}
 						
 						report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
@@ -223,29 +287,44 @@ public class MainActivity extends Activity {
 						double avgOptRuntime = 0;
 						for(int i = 0; i < 20; i++){
 							is = getResources().openRawResource(R.raw.ma);
-						
 							data = getImageFromInputStream(is);
 							w = getImageWidth();
 							h = getImageHeight();
-						
 							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
-						
+							passANewImage();
+							
 							is = getResources().openRawResource(R.raw.me);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.mg);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.mm);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.mq);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 						}
 						
@@ -264,30 +343,44 @@ public class MainActivity extends Activity {
 					double avgUnoptRuntime = 0;
 					for(int i = 0; i < 20; i++){
 						is = getResources().openRawResource(R.raw.ha);
-					
 						data = getImageFromInputStream(is);
 						w = getImageWidth();
 						h = getImageHeight();
-					
 						setSourceImage(data, w, h);
 						avgUnoptRuntime += doBenchmark(typeOfOp,false);
-					
+						passANewImage();
+						
 						is = getResources().openRawResource(R.raw.he);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						passANewImage();
 						
 						is = getResources().openRawResource(R.raw.hg);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						passANewImage();
 						
 						is = getResources().openRawResource(R.raw.hm);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgUnoptRuntime += doBenchmark(typeOfOp,false);
+						passANewImage();
 						
 						is = getResources().openRawResource(R.raw.hq);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgUnoptRuntime += doBenchmark(typeOfOp,false);
-						
+						passANewImage();
 					}
 					
 					report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
@@ -295,30 +388,44 @@ public class MainActivity extends Activity {
 					double avgOptRuntime = 0;
 					for(int i = 0; i < 20; i++){
 						is = getResources().openRawResource(R.raw.ha);
-					
 						data = getImageFromInputStream(is);
 						w = getImageWidth();
 						h = getImageHeight();
-					
 						setSourceImage(data, w, h);
 						avgOptRuntime += doBenchmark(typeOfOp,true);
-					
+						passANewImage();
+						
 						is = getResources().openRawResource(R.raw.he);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgOptRuntime += doBenchmark(typeOfOp,true);
+						passANewImage();
 						
 						is = getResources().openRawResource(R.raw.hg);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgOptRuntime += doBenchmark(typeOfOp,true);
+						passANewImage();
 						
 						is = getResources().openRawResource(R.raw.hm);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgOptRuntime += doBenchmark(typeOfOp,true);
+						passANewImage();
 						
 						is = getResources().openRawResource(R.raw.hq);
 						data = getImageFromInputStream(is);
+						w = getImageWidth();
+						h = getImageHeight();
+						setSourceImage(data, w, h);
 						avgOptRuntime += doBenchmark(typeOfOp,true);
-						
+						passANewImage();
 					}
 					
 					report("The average optimised runtime is " + (avgOptRuntime/100));
@@ -338,25 +445,41 @@ public class MainActivity extends Activity {
 							data = getImageFromInputStream(is);
 							w = getImageWidth();
 							h = getImageHeight();
-							
 							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhe);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhg);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhm);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhq);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgUnoptRuntime += doBenchmark(typeOfOp,false);
+							passANewImage();
 						}
 					
 						report("The average unoptimised runtime is " + (avgUnoptRuntime/100));
@@ -364,30 +487,44 @@ public class MainActivity extends Activity {
 						double avgOptRuntime = 0;
 						for(int i = 0; i < 20; i++){
 							is = getResources().openRawResource(R.raw.vha);
-							
 							data = getImageFromInputStream(is);
 							w = getImageWidth();
 							h = getImageHeight();
-
 							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhe);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhg);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhm);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
+							passANewImage();
 							
 							is = getResources().openRawResource(R.raw.vhq);
 							data = getImageFromInputStream(is);
+							w = getImageWidth();
+							h = getImageHeight();
+							setSourceImage(data, w, h);
 							avgOptRuntime += doBenchmark(typeOfOp,true);
-							
+							passANewImage();
 						}
 						report("The average optimised runtime is " + (avgOptRuntime/100));
 						report("The speedup is " + (avgUnoptRuntime/100)/(avgOptRuntime/100));
@@ -401,11 +538,7 @@ public class MainActivity extends Activity {
 						report("****************************");
 						report("----------------------------");
 						report("convert 32 -> 16");
-						report("----------------------------");
-						
-						
-						//showToUser("640x480 (0.3 mpx resolution)");
-						
+						report("----------------------------");						
 						zeroPointThreeMegaPixels(0);
 						report("----------------------------");
 						report("binary thresh (8-bit)");
@@ -657,10 +790,10 @@ public class MainActivity extends Activity {
 						report("");
 						report("");
 						report("");
-						
-						byte[] resultData = getSourceImage();
-						Bitmap resultPhoto = BitmapFactory.decodeByteArray(resultData, 0, resultData.length);
-						imageView.setImageBitmap(resultPhoto);
+						passANewImage();
+//						byte[] resultData = getSourceImage();
+//						Bitmap resultPhoto = BitmapFactory.decodeByteArray(resultData, 0, resultData.length);
+//						imageView.setImageBitmap(resultPhoto);
 			        }
 				}).start();
 			}});
