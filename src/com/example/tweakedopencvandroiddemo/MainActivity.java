@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
 		private Handler imageDisplayHandler = new Handler() {
 			@Override
 				public void handleMessage(Message newContent) {
-					Log.e("Captains Log", "Oh boy... a new piccy!");
+					//Log.e("Captains Log", "Oh boy... a new piccy!");
 					ImageView imageView = (ImageView)findViewById(R.id.imageView1);
 					
 					byte[] resultData = getSourceImage();

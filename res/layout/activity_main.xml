@@ -2,42 +2,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:gravity="bottom"
+    tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Run Tests" />
+    <LinearLayout
+  		android:orientation="vertical"
+  		android:layout_gravity="center_horizontal"
+  		android:layout_height="fill_parent"
+  		android:layout_width="fill_parent"
+  		android:weightSum="1.0">
+  
+      		<ScrollView
+        		android:id="@+id/scrollView1"
+        		android:layout_height="0dp"
+        		android:layout_width="match_parent"
+        		android:layout_weight=".45">
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="false" >
+            	<TextView
+                	android:id="@+id/textView1"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content">
+                </TextView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/ic_launcher" android:contentDescription="Test image suite"/>
-
+    		</ScrollView>
+  
+    		<ImageView
+        		android:id="@+id/imageView1"
+        		android:layout_height="0dp"
+        		android:layout_width="match_parent"
+        		android:contentDescription="Test image suite"
+        		android:src="@drawable/ic_launcher"
+        		android:layout_weight=".45">
+            </ImageView>
+    		 
+    		<Button
+				android:id="@+id/button1"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_alignParentBottom="true"
+				android:text="Run Tests" 
+				android:layout_weight=".10">
+            </Button>
+    		
+	</LinearLayout>
+      			
 </RelativeLayout>
