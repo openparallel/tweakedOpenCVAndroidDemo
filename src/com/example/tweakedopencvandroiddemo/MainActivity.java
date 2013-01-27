@@ -1,7 +1,6 @@
 package com.example.tweakedopencvandroiddemo;
 
 import java.io.InputStream;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,17 +22,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-
+	
 	//use the JNI/NDK
 		static {
 			System.loadLibrary("opencv");
 		}
-
+		
 		//for the following functions
 		public native byte[] getSourceImage();
 		public native boolean setSourceImage(int[] data, int w, int h);
 		public native double doBenchmark(int method, boolean doOptimise);
-		public native boolean fiveATime(int[] data1, int[] data2, int[] data3, int[] data4, int[] data5, int w, int h);
 		
 		private ImageView imageView;
 		private int width, height;
@@ -67,41 +65,34 @@ public class MainActivity extends Activity {
 					TextView textView = (TextView)findViewById(R.id.textView1);
 					Bundle resBundle = (Bundle)newContent.obj;
 					
-					
 					textView.append(resBundle.getString("status").toString()+"\n");
 					
-					
-					
 					textView.setSelected(true); 
-					Spannable text = (Spannable) textView.getText(); 
-					Selection.setSelection(text, text.length()); 
+					Spannable text = (Spannable) textView.getText();
+					Selection.setSelection(text, text.length());
 					
 					ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView1);
 					scrollView.fullScroll(View.FOCUS_DOWN);
 				}
 		};
 		
-		
 		private Handler imageDisplayHandler = new Handler() {
 			@Override
 				public void handleMessage(Message newContent) {
-					//Log.e("Captains Log", "Oh boy... a new piccy!");
 					ImageView imageView = (ImageView)findViewById(R.id.imageView1);
 					
 					byte[] resultData = getSourceImage();
 					Bitmap resultPhoto = BitmapFactory.decodeByteArray(resultData, 0, resultData.length);
 					
 					imageView.setImageBitmap(resultPhoto);
-				
 				}
 		};
-			
 		
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_main);
-						
+			
 			final Button benchmarkButton = (Button)findViewById(R.id.button1);
 			ImageView imageView =  (ImageView)findViewById(R.id.imageView1);
 			TextView textView = (TextView)findViewById(R.id.textView1);
@@ -111,7 +102,6 @@ public class MainActivity extends Activity {
 			benchmarkButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v){
-
 				new Thread(new Runnable() {
 					public void passANewImage(){
 						Message myMessage=new Message();
@@ -135,7 +125,6 @@ public class MainActivity extends Activity {
 					}
 					
 					void zeroPointThreeMegaPixels(int typeOfOp){
-						
 						int data[];
 						int w,h;
 						InputStream is;
@@ -531,8 +520,8 @@ public class MainActivity extends Activity {
 						
 					}
 					
-			        public void run() {
-
+					public void run() {
+						
 						report("****************************");
 						report("640x480 (0.3 mpx resolution)");
 						report("****************************");
@@ -791,9 +780,6 @@ public class MainActivity extends Activity {
 						report("");
 						report("");
 						passANewImage();
-//						byte[] resultData = getSourceImage();
-//						Bitmap resultPhoto = BitmapFactory.decodeByteArray(resultData, 0, resultData.length);
-//						imageView.setImageBitmap(resultPhoto);
 			        }
 				}).start();
 			}});

@@ -132,7 +132,7 @@ LOCAL_C_INCLUDES := \
 		$(LOCAL_PATH)/imgproc/src/ \
 		$(LOCAL_PATH)/imgproc/include
         
-LOCAL_CFLAGS := $(LOCAL_C_INCLUDES:%=-I%) $(USING_NEON) -O3 -ftree-vectorize -lz -lm
+LOCAL_CFLAGS := $(LOCAL_C_INCLUDES:%=-I%) $(USING_NEON) -Wno-psabi -O3 -ftree-vectorize -lz -lm
 
 
 LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib \
@@ -143,9 +143,6 @@ LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib \
 
 
 LOCAL_SRC_FILES := \
-		Utils.cpp \
-		Transform.cpp \
-		Harness.cpp \
         WLNonFileByteStream.cpp \
         ImageProcessor.cpp
 
