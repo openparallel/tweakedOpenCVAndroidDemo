@@ -780,7 +780,7 @@ public class MainActivity extends Activity {
 						report("");
 						report("");
 						passANewImage();
-			        }
+					}
 				}).start();
 			}});
 		}
