@@ -9,16 +9,6 @@
 #include "ImageProcessor.h"
 #include "Harness.hpp"
 #include <arm_neon.h>
-/*
- * Private variable to track the number of features
- */
-int numberOfFeatures = 0;
-char* pwd = (char*)"";
-#ifdef ANDROID
-//this is only used as a flag for the android device to wait for the NDK
-bool processingFinished = false;
-#endif
-
 
 /*
  * Private Utility functions
@@ -58,8 +48,8 @@ void Log(char* message, bool errorFlag){
     return;
 }
 
-
-
+/*
+//Divide by 3 in NEON
 uint8x8_t vdiv3_u8(uint8x8_t in){
     //widen in
     uint16x8_t tmp = vmovl_u8(in);
@@ -83,7 +73,9 @@ uint8x8_t vdiv3_u8(uint8x8_t in){
     in  = vmovn_u16(tmp);
     return in;
 }
+*/
 
+/*
 const int NUMBER_OF_THREADS = 4;
 
 struct thread_data_neon
@@ -97,8 +89,6 @@ struct thread_data_neon
 };
 
 struct thread_data_neon thread_data_array_neon[NUMBER_OF_THREADS];
-
-
 
 void *doThreadGruntworkNeon(void*threadarg){
     
@@ -410,7 +400,8 @@ void *doThreadGruntwork(void*threadarg){
     int segment = my_data->image_size/NUMBER_OF_THREADS;
     int startPoint = my_data->thread_id * segment;
     int stopPoint = (my_data->thread_id+1) * segment;
-    
+    */
+	
     /*
      *before
      *
@@ -444,6 +435,7 @@ void *doThreadGruntwork(void*threadarg){
      *after
      */
     
+	 /*
     for(int i = startPoint; i < stopPoint; i ++){
         //you would think it is faster to *0.3 but nope!
         my_data->b[i] = (int)((my_data->b[i] + my_data->g[i] + my_data->r[i])/3)-20;
@@ -585,6 +577,8 @@ void applySepiaToneWithDirectPixelManipulations(IplImage* target){
     //do sepia processing
     
     for(int i = 0; i < target->width*target->height; i ++){
+	*/
+		
         /*
          *before:
          //store the greyscale value into the blue vector
@@ -616,7 +610,8 @@ void applySepiaToneWithDirectPixelManipulations(IplImage* target){
          */
         
         //you would think it is faster to *0.3 but nope!
-        b[i] = (int)((b[i] + g[i] + r[i])/3)-20;
+		 /*
+		b[i] = (int)((b[i] + g[i] + r[i])/3)-20;
         
         g[i] = b[i]+40;
         r[i] = b[i]+60;
@@ -724,6 +719,7 @@ void overlayImage(IplImage* target, IplImage* source, int x, int y) {
     }
 }
 
+*/
 
 /*
  * End of Private utility functions
@@ -739,8 +735,8 @@ void overlayImage(IplImage* target, IplImage* source, int x, int y) {
 /*
  * Public feature detection functions
  */
-
-
+	 
+	 /*
 IplImage* drawRectangleOnImage(CvRect featureRect, IplImage*inputImage){
     
     cvRectangle(inputImage, cvPoint(featureRect.x, featureRect.y), cvPoint(featureRect.x + featureRect.width, featureRect.y + featureRect.height), cvScalar(0, 255, 255, 255), 3, 1, 0);
@@ -761,7 +757,7 @@ IplImage* drawRectangleOnImageWithColourAndFilled(CvRect featureRect, IplImage*i
     
     return inputImage;
 }
-
+	*/
 #pragma mark start of NeonvsSSE tests
 /*
     Start of ARM NEON vs Intel SSE Benchmarks
@@ -1085,11 +1081,8 @@ void thresholdTests(int runType, int operation){
             break;
     }
     
-    
     image = thresholded.clone();
     image.convertTo(image,CV_8U);
-    
-    
     
     //write it back to IplImage
     for (int y = 0; y < image.rows; y++) {
@@ -1101,16 +1094,13 @@ void thresholdTests(int runType, int operation){
             uchar g = imagedata[x+1];
             uchar r = imagedata[x+2];
             
-            
-            
             ptr[x]   = b;
             ptr[x+1] = g;
             ptr[x+2] = r;
         }
         
     }
-
-    
+	
 }
 
 void invertTests(){
@@ -1281,50 +1271,12 @@ void cvtScaleTests(){
  */
 #pragma mark end of NeonvsSSE tests
 
-
-/*
- * End of public feature detection functions
- */
-
 #ifndef ANDROID
 void setWorkingDir(char* wd){
     pwd = wd;
 }
 #endif
 
-/*
- * Now for android stuff
- */
-#ifdef ANDROID
-JNIEXPORT
-jboolean
-JNICALL
-Java_com_example_tweakedopencvandroiddemo_MainActivity_doChainOfImageProcessingOperations(JNIEnv* env,
-                                                                                        jobject thiz){
-    processingFinished = false;
-    
-    //gauravsInvertTest();
-    
-    cv::setUseOptimized(!cv::useOptimized());
-    //sobelTests();
-    gaussianBlurTests();
-    //resizeTests();
-    //thresholdTests();
-    //invertTests();
-    //cvtScaleTests();
-    
-    
-    //applySepiaTone(m_sourceImage);
-    //applySepiaToneWithDirectPixelManipulations(m_sourceImage);
-    //applySepiaToneWithDirectPixelManipulationsAndNeonSSE(m_sourceImage);
-    //applySepiaToneWithDirectPixelManipulationsAndNeonSSEAndPthreadsForSMP(m_sourceImage);
-    //applySepiaToneWithDirectPixelManipulationsAndPthreadsForSMP(m_sourceImage);
-    
-    
-    processingFinished = true;
-    return true;
-    
-}
 
 JNIEXPORT
 jdouble
@@ -1412,6 +1364,7 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_doBenchmark(JNIEnv* env, 
     return theTime;
 }
 
+/*
 JNIEXPORT
 void 
 JNICALL
@@ -1425,6 +1378,7 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_setWorkingDir(JNIEnv* env
     
     return;
 }
+*/
 
 JNIEXPORT
 void
@@ -1592,13 +1546,12 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_getSourceImage(JNIEnv* en
 JNIEXPORT
 jboolean
 JNICALL
-Java_com_example_tweakedopencvandroiddemo_MainActivity_setSourceImage(JNIEnv* env,
+Java_com_example_tweakedopencvandroiddemo_MainActivity_fiveATime_MainActivity_setSourceImage(JNIEnv* env,
                                                                      jobject thiz,
                                                                      jintArray photo_data,
                                                                      jint width,
                                                                      jint height)
 {	
-        
 	// Release the image if it hasn't already been released.
 	if (m_sourceImage) {
 		cvReleaseImage(&m_sourceImage);
@@ -1612,8 +1565,6 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_setSourceImage(JNIEnv* en
 	}
 	
 	return true;
-
-#endif
 }
 
 JNIEXPORT
@@ -1697,7 +1648,7 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_fiveATime(JNIEnv* env,
     return true;
     
 }
-
+/*
 JNIEXPORT
 jboolean
 JNICALL
@@ -1718,7 +1669,7 @@ Java_com_example_videostreamprocessor_VideoActivity_stringFromJNI(JNIEnv* env, j
     return env->NewStringUTF("Hello from JNI!");
     
 }
-
+*/
 
 /*
  * End of android specific stuff

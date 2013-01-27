@@ -34,7 +34,7 @@
 #include "WLNonFileByteStream.h"
 #include "highgui/src/grfmt_bmp.hpp"
 
-//neon & Ne10 libraries
+//Ne10 libraries
 /*
 #ifdef USINGNEON
     #include "inc/NE10_c.h"
@@ -73,7 +73,7 @@ IplImage *m_sourceImage = 0;
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+    /*
     JNIEXPORT
     jboolean
     JNICALL
@@ -108,7 +108,8 @@ extern "C" {
     JNICALL
     Java_com_example_tweakedopencvandroiddemo_MainActivity_doChainOfImageProcessingOperations(JNIEnv* env,
                                                                                              jobject thiz);
-    
+	 */
+	
     JNIEXPORT
     jdouble
     JNICALL
@@ -142,7 +143,7 @@ extern "C" {
                                                                        jintArray photo_data5,
                                                                        jint width,
                                                                        jint height);
-    
+    /*
     JNIEXPORT
     jboolean
     JNICALL
@@ -153,6 +154,8 @@ extern "C" {
     jstring 
     JNICALL
     Java_com_example_tweakedopencvandroiddemo_MainActivity_stringFromJNI(JNIEnv* env, jobject thiz);
+	*/
+	
 #ifdef __cplusplus
 }
 #endif
