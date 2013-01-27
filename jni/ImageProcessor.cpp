@@ -12,6 +12,7 @@
 #include <time.h>
 
 
+
 double oldTime, newTime, theTime;
 int clockTime;
 
@@ -374,6 +375,7 @@ void thresholdTests(int runType, int operation){
 }
 
 
+
 /*
 void invertTests(){
 	
@@ -466,6 +468,7 @@ void invertTests(){
 */
 
 
+
 void cvtScaleTests(){
 	
 	//convert the image to opencv2 Mat format
@@ -501,8 +504,8 @@ void cvtScaleTests(){
 			ptr[x+2] = r;
 		}
 	}
-	
 }
+
 
 
 /*
@@ -515,6 +518,7 @@ void cvtScaleTests(){
 		pwd = wd;
 	}
 #endif
+
 
 
 #pragma mark JNI interfacing functions
@@ -599,12 +603,38 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_doBenchmark(JNIEnv* env,
 			edgeDetectionTests();
 			break;
 		
+		//binary 32-bit
+		case 14:
+			thresholdTests(2, 0);
+			break;
+		
+		//binary inv 32-bit
+		case 15:
+			thresholdTests(2, 1);
+			break;
+		
+		//trunc 32-bit
+		case 16:
+			thresholdTests(2, 2);
+			break;
+		
+		//to-zero 32-bit
+		case 17:
+			thresholdTests(2, 3);
+			break;
+		
+		//to-zero inv 32-bit
+		case 18:
+			thresholdTests(2, 4);
+			break;
+		
 		default:
 			break;
 		}
 	
 	return theTime;
 }
+
 
 
 // Given an integer array of image data, load a float array.
@@ -636,6 +666,7 @@ float* getFloatImageFromIntArray(JNIEnv* env, jintArray array_data,
 	
 	return pixelsImg;
 }
+
 
 
 // Generate and return a boolean array from the source image.
@@ -675,6 +706,7 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_getSourceImage(JNIEnv* en
 }
 
 
+
 // Given an integer array of image data, load an IplImage.
 // It is the responsibility of the caller to release the IplImage.
 IplImage* getIplImageFromIntArray(JNIEnv* env, jintArray array_data,
@@ -695,6 +727,7 @@ IplImage* getIplImageFromIntArray(JNIEnv* env, jintArray array_data,
 	
 	return image;
 }
+
 
 
 // Set the source image and return true if successful or false otherwise.
