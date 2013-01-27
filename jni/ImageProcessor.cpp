@@ -532,6 +532,20 @@ Java_com_example_tweakedopencvandroiddemo_MainActivity_doBenchmark(JNIEnv* env,
 	
 	cv::setUseOptimized(doOptimise);
 	
+	useNe10();
+	CV_EXPORTS_W bool useNEON();
+	
+	if(cv::useOptimized()){
+		if(!cv::useNEON()){
+			setUseNEON(true);
+			setUseNe10(false);
+		}
+		else{
+			setUseNEON(false);
+			setUseNe10(true);
+		}
+	}
+	
 	switch (method) {
 		//convert
 		case 0:
